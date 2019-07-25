@@ -18,3 +18,6 @@ class AppContainer extends Component {
 }
 
 export default AppContainer;
+
+const wrapper = document.getElementById("app");
+wrapper ? ReactDOM.render(<AppContainer />, wrapper) : false;

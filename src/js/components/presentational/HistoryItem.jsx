@@ -8,43 +8,19 @@ import {
 } from "@material-ui/core";
 import { MotherNurse, Sleep, AccountQuestion } from "mdi-material-ui";
 
-import TimerDisplay from "./TimerDisplay.jsx";
-
-const localeDateStringOptions = {
-  hour: "numeric",
-  minute: "numeric"
-};
-
-const HistoryItem = ({ kind, startedAt, timerTime }) => {
-  const startedAtString = new Date(startedAt).toLocaleTimeString(
-    "en-US",
-    localeDateStringOptions
-  );
+const HistoryItem = ({ kind }) => {
   return (
     <ListItem title={kind}>
       <ListItemAvatar>
-        <Avatar>{iconFor(kind)}</Avatar>
+        <Avatar><AccountQuestion /></Avatar>
       </ListItemAvatar>
-      <ListItemText
-        primary={startedAtString}
-        secondary={<TimerDisplay timerTime={timerTime} />}
-      />
+      <ListItemText primary={`Unknown history kind -- ${kind}`} />
     </ListItem>
   );
 };
 
 HistoryItem.propTypes = {
-  kind: PropTypes.string.isRequired,
-  startedAt: PropTypes.number.isRequired
+  kind: PropTypes.string.isRequired
 };
 
 export default HistoryItem;
-
-function iconFor(kind) {
-  switch (kind) {
-    case "feeding":
-      return <MotherNurse />;
-    default:
-      return <AccountQuestion />;
-  }
-}

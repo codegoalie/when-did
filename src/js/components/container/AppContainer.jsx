@@ -13,18 +13,29 @@ class AppContainer extends Component {
     };
 
     this.reportFeeding = this.reportFeeding.bind(this);
+    this.reportDiaper = this.reportDiaper.bind(this);
+    this.recordHistory = this.recordHistory.bind(this);
+  }
+
+  recordHistory(newItem) {
+    this.setState({
+      history: [...this.state.history, newItem]
+    });
   }
 
   reportFeeding(startedAt, timerTime) {
-    this.setState({
-      history: [
-        ...this.state.history,
-        {
-          kind: "feeding",
-          timerTime: timerTime,
-          startedAt: startedAt
-        }
-      ]
+    this.recordHistory({
+      kind: "feeding",
+      timerTime: timerTime,
+      startedAt: startedAt
+    });
+  }
+
+  reportDiaper(changedAt, contents) {
+    this.recordHistory({
+      kind: "diaper",
+      changedAt: changedAt,
+      contents: contents
     });
   }
 
@@ -35,6 +46,7 @@ class AppContainer extends Component {
           <App
             reportFeeding={this.reportFeeding}
             history={this.state.history}
+            reportDiaper={this.reportDiaper}
           />
         </Container>
       </div>

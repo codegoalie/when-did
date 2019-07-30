@@ -53,6 +53,7 @@ class FeedinTimer extends Component {
           pauseTimer={this.pauseTimer}
           saveTime={this.saveTime}
         />
+        <br />
         <TimerDisplay timerTime={timerTime} />
       </React.Fragment>
     );

@@ -1,24 +1,28 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
 
 import TimerDisplay from "../presentational/TimerDisplay.jsx";
+import TimerButtons from "../presentational/TimerButtons.jsx";
 
 class FeedinTimer extends Component {
   constructor() {
     super();
 
-    this.state = { timerOn: false, timerTime: 0 };
+    this.state = { timerOn: false, timerTime: 0, timerFirstStart: 0 };
 
     this.startTimer = this.startTimer.bind(this);
-    this.stopTimer = this.stopTimer.bind(this);
+    this.pauseTimer = this.pauseTimer.bind(this);
+    this.saveTime = this.saveTime.bind(this);
   }
 
   startTimer() {
     this.setState({
       timerOn: true,
       timerTime: this.state.timerTime,
-      timerStart: Date.now() - this.state.timerTime
+      timerStart: Date.now() - this.state.timerTime,
+      timerFirstStart: this.state.timerFirstStart === 0
+        ? Date.now()
+        : this.state.timerFirstStart
     });
     this.timer = setInterval(() => {
       this.setState({
@@ -27,31 +31,28 @@ class FeedinTimer extends Component {
     }, 10);
   }
 
-  stopTimer() {
+  pauseTimer() {
     clearInterval(this.timer);
     this.setState({ timerOn: false });
-    this.props.reportFeeding(this.state.timerStart, this.state.timerTime);
+  }
+
+  saveTime() {
+    this.pauseTimer();
+    this.props.reportFeeding(this.state.timerFirstStart, this.state.timerTime);
+    this.setState({ timerFirstStart: 0, timerTime: 0 });
   }
 
   render() {
-    const { timerOn, timerTime } = this.state;
+    const { timerOn, timerTime, timerFirstStart } = this.state;
     return (
       <React.Fragment>
-        {timerOn
-          ? <Button
-              onClick={this.stopTimer}
-              variant="contained"
-              color="secondary"
-            >
-              Stop Timer
-            </Button>
-          : <Button
-              onClick={this.startTimer}
-              variant="contained"
-              color="primary"
-            >
-              Start Timer
-            </Button>}
+        <TimerButtons
+          running={timerOn}
+          showSaveButton={timerFirstStart !== 0}
+          startTimer={this.startTimer}
+          pauseTimer={this.pauseTimer}
+          saveTime={this.saveTime}
+        />
         <TimerDisplay timerTime={timerTime} />
       </React.Fragment>
     );

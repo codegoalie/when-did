@@ -30,7 +30,7 @@ class FeedinTimer extends Component {
   stopTimer() {
     clearInterval(this.timer);
     this.setState({ timerOn: false });
-    this.props.reportStop(this.state.timerTime);
+    this.props.reportFeeding(this.state.timerStart, this.state.timerTime);
   }
 
   render() {
@@ -59,11 +59,11 @@ class FeedinTimer extends Component {
 }
 
 FeedinTimer.propTypes = {
-  reportStop: PropTypes.func
+  reportFeeding: PropTypes.func
 };
 
 FeedinTimer.defaultProps = {
-  reportStop: () => {}
+  reportFeeding: () => {}
 };
 
 export default FeedinTimer;
